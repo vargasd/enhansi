@@ -373,6 +373,7 @@ local function get_groups()
     SnacksPickerPathHidden = { link = "EnhansiGray" },
     SnacksPickerGitStatusUntracked = { link = "EnhansiGray" },
     SnacksPickerPathIgnored = { link = "EnhansiBg3" },
+    SnacksDashboardHeader = { link = "EnhansiYellow" },
     TelescopeNormal = { link = "EnhansiFg1" },
     TelescopeSelection = { link = "EnhansiOrangeBold" },
     TelescopeSelectionCaret = { link = "EnhansiRed" },
