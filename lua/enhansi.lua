@@ -112,6 +112,7 @@ local function get_groups()
     dark_green = Enhansi.palette.DarkGreen,
     dark_cyan = Enhansi.palette.DarkCyan,
     gray = Enhansi.palette.Gray,
+    bright_black = Enhansi.palette.BrightBlack,
   }
 
   local config = Enhansi.config
@@ -169,7 +170,7 @@ local function get_groups()
     Normal = config.transparent_mode and { ctermfg = colors.fg1, ctermbg = nil }
       or { ctermfg = colors.fg1, ctermbg = colors.bg0 },
     NormalFloat = { ctermfg = colors.fg1 },
-    FloatBorder = { ctermfg = colors.fg4 },
+    FloatBorder = { ctermfg = colors.bright_black },
     FloatermBorder = { link = "FloatBorder" },
     NormalNC = config.dim_inactive and { ctermfg = colors.fg0, ctermbg = colors.bg1 } or { link = "Normal" },
     CursorLine = { ctermbg = colors.bg1 },
