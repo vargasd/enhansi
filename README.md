@@ -1,138 +1,43 @@
-<div align="center">
-      <h1> <img src="https://i.postimg.cc/WpQzgxVh/plugin-Icon.png" width="80px"><br/>gruvbox.nvim</h1>
-     </div>
-<p align="center"> 
-      <a href="https://twitter.com/intent/user?screen_name=ellisonleao" target="_blank"><img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/ellisonleao?style=for-the-badge" style="vertical-align:center" ></a>
-      <a href="#"><img alt="Made with Lua" src="https://img.shields.io/badge/Made%20with%20Lua-blueviolet.svg?style=for-the-badge&logo=lua" style="vertical-align:center" /></a>
-</p>
+# enhansi
 
-A port of [gruvbox community](https://github.com/gruvbox-community/gruvbox) theme to lua with [treesitter](https://github.com/nvim-treesitter/nvim-treesitter) and [semantic highlights](https://neovim.io/doc/user/lsp.html#lsp-semantic-highlight) support!
+Color schemes that work with your terminal palette.
 
-<p align="center">
-    <img src="https://i.postimg.cc/fy3tnGFt/gruvbox-themes.png" />
-</p>
+## Neovim
 
-# Prerequisites
-
-Neovim 0.8.0+
-
-# Installing
-
-## Using `packer`
+Use your favorite package manager to set up. For customization:
 
 ```lua
-use { "ellisonleao/gruvbox.nvim" }
-```
-
-## Using `lazy.nvim`
-
-```lua
-{ "ellisonleao/gruvbox.nvim", priority = 1000 , config = true, opts = ...}
-```
-
-## Using `vim-plug`
-
-```vim
-Plug 'ellisonleao/gruvbox.nvim'
-```
-
-# Basic Usage
-
-Inside `init.vim`
-
-```vim
-set background=dark " or light if you want light mode
-colorscheme gruvbox
-```
-
-Inside `init.lua`
-
-```lua
-vim.o.background = "dark" -- or "light" for light mode
-vim.cmd([[colorscheme gruvbox]])
-```
-
-# Configuration
-
-Additional settings for gruvbox are:
-
-```lua
--- Default options:
-require("gruvbox").setup({
-  terminal_colors = true, -- add neovim terminal colors
-  undercurl = true,
-  underline = true,
-  bold = true,
-  italic = {
-    strings = true,
-    emphasis = true,
-    comments = true,
-    operators = false,
-    folds = true,
-  },
-  strikethrough = true,
-  invert_selection = false,
-  invert_signs = false,
-  invert_tabline = false,
-  invert_intend_guides = false,
-  inverse = true, -- invert background for search, diffs, statuslines and errors
-  contrast = "", -- can be "hard", "soft" or empty string
-  palette_overrides = {},
-  overrides = {},
-  dim_inactive = false,
-  transparent_mode = false,
-})
-vim.cmd("colorscheme gruvbox")
-```
-
-**VERY IMPORTANT**: Make sure to call setup() **BEFORE** calling the colorscheme command, to use your custom configs
-
-## Overriding
-
-### Palette
-
-You can specify your own palette colors. For example:
-
-```lua
-require("gruvbox").setup({
-    palette_overrides = {
-        bright_green = "#990000",
+-- defaults shown below
+require('enhansi').setup({
+    -- when true, uses extended colors for diff background (see below); otherwise, sets foreground to red/green/blue
+    extended = true,
+    -- when supplied, these will be set for the gui colors. This gets around the ctermul issue, but you need a way to get the actual hex colors into your config
+    rgb_colors = {
+        -- black, red, green, yellow, blue, magenta, cyan, gray (darkwhite), dim (brightblack), white
+        dark = {
+            -- red, green, yellow, blue, magenta, cyan
+        }
+        bg = {
+            -- red, green, blue
+        }
     }
 })
-vim.cmd("colorscheme gruvbox")
 ```
 
-### Highlight groups
+### Extended Color Palette
 
-If you don't enjoy the current color for a specific highlight group, now you can just override it in the setup. For
-example:
+I like a nice background for diff views. Unfortunately, 16 colors isn't really enough to have a bright, dim, and background colors. So I've borrowed some colors from the 8-bit color space:
 
-```lua
-require("gruvbox").setup({
-    overrides = {
-        SignColumn = {bg = "#ff9900"}
-    }
-})
-vim.cmd("colorscheme gruvbox")
-```
+- 17 (very dark blue) for `DiffChange`
+- 22 (very dark lime green) for `DiffAdd`
+- 52 (very dark red) for `DiffDelete`
 
-It also works with treesitter groups and lsp semantic highlight tokens
+Look into your terminal emulator docs for how to override the default hex colors for these, since not all support setting colors outside of the first 16. If your emulator doesn't support this, diffs may not look great with your terminal colors. You can set `extended = false` to switch foreground-based diff coloring.
 
-```lua
-require("gruvbox").setup({
-    overrides = {
-        ["@lsp.type.method"] = { bg = "#ff9900" },
-        ["@comment.lua"] = { bg = "#000000" },
-    }
-})
-vim.cmd("colorscheme gruvbox")
-```
+### Undercurl Color support
 
-Please note that the override values must follow the attributes from the highlight group map, such as:
+Unfortunately, due to [this issue](https://github.com/neovim/neovim/issues/8583), there is currently no way to provide undercurls with an 8-bit color. I've opted to use the named colors (red, yellow, cyan, blue) for undercurls in the `Spell*`/`DiagnosticUnderline*` highlights, which will use 24-bit color space. This means that your undercurls may be a bit jarring for your terminal colors. This is mostly why the `rgb_colors` option exists.
 
-- **fg** - foreground color
-- **bg** - background color
-- **bold** - true or false for bold font
-- **italic** - true or false for italic font
+## Bat
 
-Other values can be seen in [`synIDattr`](<https://neovim.io/doc/user/builtin.html#synIDattr()>)
+[enhansi.tmTheme](./enhansi.tmTheme) can be used as a bat theme. See the [bat README](https://github.com/sharkdp/bat/blob/master/README.md#adding-new-themes) for instructions.
