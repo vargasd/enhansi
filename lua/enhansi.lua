@@ -1,9 +1,38 @@
-local M = {
-  config = {
-    extended = true,
-    rgb_colors = {
-      dark = {},
-      bg = {},
+local M = {}
+
+---@class SpecialColors
+---@field red string
+---@field yellow string
+---@field blue string
+---@field cyan string
+---@field green string
+
+---@class BackgroundColors
+---@field red number
+---@field blue number
+---@field green number
+
+---@class CustomColors
+---@field background BackgroundColors | false
+---@field special SpecialColors
+
+---@class EnhansiConfig
+---@field custom_colors CustomColors
+
+---@type EnhansiConfig
+M.config = {
+  custom_colors = {
+    background = {
+      red = 52,
+      green = 22,
+      blue = 17,
+    },
+    special = {
+      red = "red",
+      yellow = "yellow",
+      blue = "blue",
+      cyan = "cyan",
+      green = "green",
     },
   },
 }
@@ -27,12 +56,6 @@ local colors = {
     blue = 4,
     magenta = 5,
     cyan = 6,
-  },
-
-  bg = {
-    red = 52,
-    green = 22,
-    blue = 17,
   },
 }
 
@@ -58,105 +81,83 @@ local colors = {
 ---@field link string?
 
 local function get_groups()
-  local rgb_colors = M.config.rgb_colors
+  local use_background = M.config.custom_colors.background ~= false
+  local sp_red = M.config.custom_colors.special.red
+  local sp_yellow = M.config.custom_colors.special.yellow
+  local sp_blue = M.config.custom_colors.special.blue
+  local sp_cyan = M.config.custom_colors.special.cyan
+  local sp_green = M.config.custom_colors.special.green
+
   ---@type table<string, ExplicitHighlight | ReverseHighlight | LinkHighlight>
   return {
-    Normal = { ctermfg = colors.white, fg = rgb_colors.white },
-    NonText = { ctermfg = colors.dim, fg = rgb_colors.dim },
+    Normal = { ctermfg = colors.white },
+    NonText = { ctermfg = colors.dim },
     Visual = { reverse = true },
     LineNr = { link = "NonText" },
     FloatBorder = { link = "NonText" },
     Italic = { italic = true },
-    Title = { ctermfg = colors.green, fg = rgb_colors.green },
-    Directory = { ctermfg = colors.gray, fg = rgb_colors.gray },
-    ColorColumn = { ctermbg = colors.black, bg = rgb_colors.black },
-    TabLine = { ctermfg = colors.white, fg = rgb_colors.white },
+    Title = { ctermfg = colors.green },
+    Directory = { ctermfg = colors.gray },
+    ColorColumn = { ctermbg = colors.black },
+    TabLine = { ctermfg = colors.white },
     TabLineSel = { reverse = true },
 
-    Comment = { ctermfg = colors.gray, fg = rgb_colors.gray, italic = true },
-    Todo = { ctermfg = colors.cyan, fg = rgb_colors.cyan },
-    Constant = { ctermfg = colors.magenta, fg = rgb_colors.magenta },
-    Delimiter = { ctermfg = colors.gray, fg = rgb_colors.gray },
-    String = { ctermfg = colors.green, fg = rgb_colors.green, italic = true },
-    Function = { ctermfg = colors.green, fg = rgb_colors.green },
+    Comment = { ctermfg = colors.gray, italic = true },
+    Todo = { ctermfg = colors.cyan },
+    Constant = { ctermfg = colors.magenta },
+    Delimiter = { ctermfg = colors.gray },
+    String = { ctermfg = colors.green, italic = true },
+    Function = { ctermfg = colors.green },
     Operator = { link = "Delimiter" },
-    Special = { ctermfg = colors.magenta, fg = rgb_colors.magenta },
-    Number = { ctermfg = colors.magenta, fg = rgb_colors.magenta },
-    Boolean = { ctermfg = colors.magenta, fg = rgb_colors.magenta },
-    Statement = { ctermfg = colors.red, fg = rgb_colors.red },
-    Type = { ctermfg = colors.yellow, fg = rgb_colors.yellow },
-    Identifier = { ctermfg = colors.blue, fg = rgb_colors.blue },
+    Special = { ctermfg = colors.magenta },
+    Number = { ctermfg = colors.magenta },
+    Boolean = { ctermfg = colors.magenta },
+    Statement = { ctermfg = colors.red },
+    Type = { ctermfg = colors.yellow },
+    Identifier = { ctermfg = colors.blue },
 
-    DiffAdd = M.config.extended and { ctermbg = colors.bg.green, bg = rgb_colors.bg.green }
-      or { ctermfg = colors.green, fg = rgb_colors.green },
-    DiffChange = M.config.extended and { ctermbg = colors.bg.blue, bg = rgb_colors.bg.blue }
-      or { ctermfg = colors.blue, fg = rgb_colors.blue },
-    DiffDelete = M.config.extended and { ctermbg = colors.bg.red, bg = rgb_colors.bg.red }
-      or { ctermfg = colors.red, fg = rgb_colors.red },
-    DiffText = { ctermfg = colors.gray, fg = rgb_colors.gray, ctermbg = nil },
+    DiffAdd = (use_background and { ctermbg = M.config.custom_colors.background.green }) or { ctermfg = colors.green },
+    DiffChange = (use_background and { ctermbg = M.config.custom_colors.background.blue }) or { ctermfg = colors.blue },
+    DiffDelete = (use_background and { ctermbg = M.config.custom_colors.background.red }) or { ctermfg = colors.red },
+    DiffText = { ctermfg = colors.gray },
 
-    DiagnosticVirtualTextError = { ctermfg = colors.dark.red, fg = rgb_colors.dark.red },
-    DiagnosticVirtualTextWarn = { ctermfg = colors.dark.yellow, fg = rgb_colors.dark.yellow },
-    DiagnosticVirtualTextInfo = { ctermfg = colors.dark.blue, fg = rgb_colors.dark.blue },
-    DiagnosticVirtualTextHint = { ctermfg = colors.dark.cyan, fg = rgb_colors.dark.cyan },
-    DiagnosticVirtualTextOk = { ctermfg = colors.dark.green, fg = rgb_colors.dark.green },
+    DiagnosticVirtualTextError = { ctermfg = colors.dark.red },
+    DiagnosticVirtualTextWarn = { ctermfg = colors.dark.yellow },
+    DiagnosticVirtualTextInfo = { ctermfg = colors.dark.blue },
+    DiagnosticVirtualTextHint = { ctermfg = colors.dark.cyan },
+    DiagnosticVirtualTextOk = { ctermfg = colors.dark.green },
 
-    SpellBad = { undercurl = true, sp = rgb_colors.red or "Red" },
-    SpellCap = { undercurl = true, sp = rgb_colors.yellow or "Yellow" },
-    SpellLocal = { undercurl = true, sp = rgb_colors.blue or "Blue" },
-    SpellRare = { undercurl = true, sp = rgb_colors.cyan or "Cyan" },
+    SpellBad = { undercurl = true, sp = sp_red },
+    SpellCap = { undercurl = true, sp = sp_yellow },
+    SpellLocal = { undercurl = true, sp = sp_blue },
+    SpellRare = { undercurl = true, sp = sp_cyan },
 
     DiagnosticUnderlineError = { link = "SpellBad" },
     DiagnosticUnderlineWarn = { link = "SpellCap" },
     DiagnosticUnderlineInfo = { link = "SpellLocal" },
     DiagnosticUnderlineHint = { link = "SpellRare" },
-    DiagnosticUnderlineOk = { undercurl = true, sp = "Green" },
+    DiagnosticUnderlineOk = { undercurl = true, sp = sp_green },
 
     ["@variable"] = { link = "Normal" },
     ["@variable.member"] = { link = "Identifier" },
     ["@markup.heading"] = { link = "Title" },
-    ["@markup.link"] = { ctermfg = colors.blue, fg = rgb_colors.blue, underline = true },
+    ["@markup.link"] = { ctermfg = colors.blue, underline = true },
     ["@punctuation.special"] = { link = "Delimiter" },
 
-    Pmenu = { ctermfg = colors.white, fg = rgb_colors.white },
-    PmenuSel = {
-      ctermfg = colors.black,
-      fg = rgb_colors.black,
-      ctermbg = colors.blue,
-      bg = rgb_colors.blue,
-      bold = true,
-    },
-    PmenuSbar = { ctermbg = colors.dim, bg = rgb_colors.dim },
-    PmenuThumb = { ctermbg = colors.white, bg = rgb_colors.white },
-    PmenuKind = { ctermfg = colors.blue, fg = rgb_colors.blue },
-
-    -- plugin-specific
-    BlinkCmpDocBorder = { link = "FloatBorder" },
-
-    NoiceCmdlinePopupBorder = { ctermfg = colors.blue, fg = rgb_colors.blue },
-    NoiceCmdlineIcon = { link = "NoiceCmdlinePopupBorder" },
-    NoiceConfirmBorder = { link = "NoiceCmdlinePopupBorder" },
-    NoiceCmdlinePopupBorderSearch = { ctermfg = colors.yellow, fg = rgb_colors.yellow },
-    NoiceCmdlineIconSearch = { link = "NoiceCmdlinePopupBorderSearch" },
-
-    SnacksPickerLine = { link = "Visual" },
-    SnacksPickerDir = { link = "Directory" },
-    SnacksPickerPathHidden = { link = "Directory" },
-    SnacksPickerPathIgnored = { link = "Directory" },
-
-    SnacksDashboardHeader = { ctermfg = colors.yellow, fg = rgb_colors.yellow },
-
-    RenderMarkdownCodeBorder = { link = "Comment" },
+    Pmenu = { ctermfg = colors.white },
+    PmenuSel = { ctermfg = colors.black, ctermbg = colors.blue, bold = true },
+    PmenuSbar = { ctermbg = colors.dim },
+    PmenuThumb = { ctermbg = colors.white },
+    PmenuKind = { ctermfg = colors.blue },
   }
 end
 
+---@param config EnhansiConfig
 M.setup = function(config)
   M.config = vim.tbl_deep_extend("force", M.config, config or {})
 end
 
 M.load = function()
-  vim.o.termguicolors = M.config.rgb_colors.white ~= nil
-
   vim.g.colors_name = "enhansi"
 
   local groups = get_groups()
