@@ -103,6 +103,7 @@ local function get_groups()
     TabLineSel = { reverse = true },
     StatusLine = { link = "NonText" },
     StatusLineNC = { link = "StatusLine" },
+    WinSeparator = { link = "NonText" },
 
     Comment = { ctermfg = colors.gray, italic = true },
     Todo = { ctermbg = colors.yellow, ctermfg = colors.black },
