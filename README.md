@@ -44,3 +44,30 @@ Unfortunately, due to [this issue](https://github.com/neovim/neovim/issues/8583)
 ## Bat
 
 [enhansi.tmTheme](./enhansi.tmTheme) can be used as a bat theme. See the [bat README](https://github.com/sharkdp/bat/blob/master/README.md#adding-new-themes) for instructions.
+
+## Nix
+
+This repo provides a nix flake for the Neovim plugin and the tmtheme at `packages.${system}.neovim` and `packages.${system}.tmtheme`, respectively. It also provides a nixpkgs overlay for convenience, allowing you to reference these via `nixpkgs.vimPlugins.enhansi-nvim` and `nixpkgs.enhansi-tmtheme`. An example for using the overlay in home-manager:
+
+```nix
+{ pkgs, inputs, ... }: {
+
+  nixpkgs.overlays = [
+    inputs.enhansi.overlays.default
+  ];
+
+  programs.neovim = {
+    enable = true;
+    plugins = [ pkgs.vimPlugins.enhansi-nvim ];
+  };
+
+  programs.bat = {
+    enable = true;
+    config.theme = "enhansi";
+    themes.enhansi = {
+      src = pkgs.enhansi-tmtheme;
+      file = "enhansi.tmTheme";
+    };
+  };
+};
+```
