@@ -105,7 +105,7 @@ local function get_groups()
     StatusLineNC = { link = "StatusLine" },
 
     Comment = { ctermfg = colors.gray, italic = true },
-    Todo = { ctermfg = colors.cyan },
+    Todo = { ctermbg = colors.yellow, ctermfg = colors.black },
     Constant = { ctermfg = colors.magenta },
     Delimiter = { ctermfg = colors.gray },
     String = { ctermfg = colors.green, italic = true },
