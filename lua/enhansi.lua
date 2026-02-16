@@ -101,6 +101,8 @@ local function get_groups()
     ColorColumn = { ctermbg = colors.black },
     TabLine = { ctermfg = colors.white },
     TabLineSel = { reverse = true },
+    StatusLine = { link = "NonText" },
+    StatusLineNC = { link = "StatusLine" },
 
     Comment = { ctermfg = colors.gray, italic = true },
     Todo = { ctermfg = colors.cyan },
