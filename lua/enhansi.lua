@@ -104,6 +104,7 @@ local function get_groups()
     StatusLine = { link = "NonText" },
     StatusLineNC = { link = "StatusLine" },
     WinSeparator = { link = "NonText" },
+    Folded = { link = "NonText" },
 
     Comment = { ctermfg = colors.gray, italic = true },
     Todo = { ctermbg = colors.yellow, ctermfg = colors.black },
