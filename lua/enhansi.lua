@@ -158,6 +158,16 @@ end
 
 ---@param config EnhansiConfig
 M.setup = function(config)
+  if not (config and config.custom_colors and config.custom_colors.special) then
+    local special_colors = {}
+    for color in pairs(M.config.custom_colors.special) do
+      special_colors[color] = colors[color]
+    end
+    config = config or {}
+    config.custom_colors = config.custom_colors or {}
+    config.custom_colors.special = require("term_rgb").get_rgb(special_colors)
+  end
+
   M.config = vim.tbl_deep_extend("force", M.config, config or {})
 end
 
