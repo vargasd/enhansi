@@ -119,6 +119,7 @@ local function get_groups()
     Statement = { ctermfg = colors.red },
     Type = { ctermfg = colors.yellow },
     Identifier = { ctermfg = colors.blue },
+    PreProc = { ctermfg = colors.cyan },
 
     DiffAdd = (use_background and { ctermbg = M.config.custom_colors.background.green }) or { ctermfg = colors.green },
     DiffChange = (use_background and { ctermbg = M.config.custom_colors.background.blue }) or { ctermfg = colors.blue },
