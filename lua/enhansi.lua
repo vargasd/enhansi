@@ -147,6 +147,7 @@ local function get_groups()
     ["@variable.member"] = { link = "Identifier" },
     ["@markup.heading"] = { link = "Title" },
     ["@markup.link"] = { ctermfg = colors.blue, underline = true },
+    ["@markup.strong"]= { ctermfg = colors.gray, bold = true },
     ["@punctuation.special"] = { link = "Delimiter" },
 
     Pmenu = { ctermfg = colors.white },
